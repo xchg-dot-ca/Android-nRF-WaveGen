@@ -47,6 +47,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -181,27 +182,48 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             }
         });
 
-        // Handle Left button click
-        btRight.setOnClickListener(new View.OnClickListener() {
+        // Handle Left button press and release handlers ( WORKS )
+        btLeft.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                byte[] value = {LEFT_COMMAND};
-                //send data to service
-                mService.writeRXCharacteristic(value);
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
+                    byte[] value = {LEFT_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
+                    byte[] value = {STOP_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                }
+                return true;
             }
         });
 
         // Handle Right button click
-        btLeft.setOnClickListener(new View.OnClickListener() {
+        btRight.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 byte[] value = {RIGHT_COMMAND};
                 //send data to service
                 mService.writeRXCharacteristic(value);
+                return true;
             }
         });
 
-        // Handle Right button click
+        // Handle Right button release
+        btRight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                if (arg1.getAction()==MotionEvent.ACTION_UP) {
+                    byte[] value = {STOP_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                }
+                return false;
+            }
+        });
+
+        // Handle Stop button click
         btStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
