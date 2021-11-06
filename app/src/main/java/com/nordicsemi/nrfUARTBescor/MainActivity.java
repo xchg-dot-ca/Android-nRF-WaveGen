@@ -147,7 +147,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 	if (btnConnectDisconnect.getText().equals("Connect")){
                 		
                 		//Connect button pressed, open DeviceListActivity class, with popup windows that scan for devices
-                		
             			Intent newIntent = new Intent(MainActivity.this, DeviceListActivity.class);
             			startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
         			} else {
@@ -162,27 +161,41 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             }
         });
 
-        // Handle Up button click
-        btUp.setOnClickListener(new View.OnClickListener() {
+        // Handle Up button press and release handlers
+        btUp.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                byte[] value = {UP_COMMAND};
-                //send data to service
-                mService.writeRXCharacteristic(value);
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
+                    byte[] value = {UP_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
+                    byte[] value = {STOP_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                }
+                return true;
             }
         });
 
-        // Handle Down button click
-        btDown.setOnClickListener(new View.OnClickListener() {
+        // Handle Down button press and release handlers
+        btDown.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                byte[] value = {DOWN_COMMAND};
-                //send data to service
-                mService.writeRXCharacteristic(value);
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
+                    byte[] value = {DOWN_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
+                    byte[] value = {STOP_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                }
+                return true;
             }
         });
 
-        // Handle Left button press and release handlers ( WORKS )
+        // Handle Left button press and release handlers
         btLeft.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View arg0, MotionEvent arg1) {
@@ -199,31 +212,24 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             }
         });
 
-        // Handle Right button click
-        btRight.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                byte[] value = {RIGHT_COMMAND};
-                //send data to service
-                mService.writeRXCharacteristic(value);
-                return true;
-            }
-        });
-
-        // Handle Right button release
+        // Handle Right button press and release handlers
         btRight.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View arg0, MotionEvent arg1) {
-                if (arg1.getAction()==MotionEvent.ACTION_UP) {
+                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
+                    byte[] value = {RIGHT_COMMAND};
+                    //send data to service
+                    mService.writeRXCharacteristic(value);
+                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
                     byte[] value = {STOP_COMMAND};
                     //send data to service
                     mService.writeRXCharacteristic(value);
                 }
-                return false;
+                return true;
             }
         });
 
-        // Handle Stop button click
+         // Handle Stop button click
         btStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,7 +262,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         
         //Handler events that received from UART service 
         public void handleMessage(Message msg) {
-  
         }
     };
 
