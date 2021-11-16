@@ -1,4 +1,4 @@
-# Android-nRF-UART-Bescor
+# Android-nRF-WaveGen
 
-Is a project to connect nRF52 based dev board to Bescor MP101 and control it via bluetooth enabled smartphone
+This app will let you control A9833 arbitrary waveform generator from your Smartphone via nRF based BLE enabled microcontroller
 This is bassed on fork from https://github.com/NordicPlayground/Android-nRF-UART
