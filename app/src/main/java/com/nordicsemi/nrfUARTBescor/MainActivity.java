@@ -61,21 +61,18 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private static final int REQUEST_SELECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static final int UART_PROFILE_READY = 10;
-    public static final String TAG = "nRFUART-BESCOR";
+    public static final String TAG = "nRFUART-WAVEGEN";
     private static final int UART_PROFILE_CONNECTED = 20;
     private static final int UART_PROFILE_DISCONNECTED = 21;
     private static final int STATE_OFF = 10;
 
-    TextView mRemoteRssiVal;
-    RadioGroup mRg;
     private int mState = UART_PROFILE_DISCONNECTED;
     private UartService mService = null;
     private BluetoothDevice mDevice = null;
     private BluetoothAdapter mBtAdapter = null;
     private ListView messageListView;
     private ArrayAdapter<String> listAdapter;
-    private Button btnConnectDisconnect,btnSend;
-    private EditText edtMessage;
+    private Button btnConnectDisconnect;
 
     /* Camera slider specific code */
     // Commands
@@ -86,6 +83,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     public static final char STOP_COMMAND = 0x04;
 
     private Button btUp, btDown, btRight, btLeft, btStop;
+
+    private EditText editFrequency, editAmplitude;
 
     public static byte[] integersToBytes(int[] values)
     {
@@ -125,6 +124,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         btRight = (Button) findViewById(R.id.btRight);
         btLeft = (Button) findViewById(R.id.btLeft);
         btStop = (Button) findViewById(R.id.btStop);
+
+        editFrequency = (EditText) findViewById(R.id.editFrequency);
 
         btDown.setEnabled(false);
         btUp.setEnabled(false);
@@ -287,6 +288,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                              btRight.setEnabled(true);
                              btLeft.setEnabled(true);
                              btStop.setEnabled(true);
+
+                             setContentView(R.layout.generator);
                      }
             	 });
             }
@@ -308,6 +311,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                              btRight.setEnabled(false);
                              btLeft.setEnabled(false);
                              btStop.setEnabled(false);
+
+                             setContentView(R.layout.main);
                      }
                  });
             }
