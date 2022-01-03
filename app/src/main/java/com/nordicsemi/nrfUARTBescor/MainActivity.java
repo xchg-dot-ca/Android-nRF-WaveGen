@@ -57,11 +57,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xchg.wavegen.WaveGenActivity;
+
 public class MainActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
     private static final int REQUEST_SELECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static final int UART_PROFILE_READY = 10;
-    public static final String TAG = "nRFUART-WAVEGEN";
+    public static final String TAG = "nRFUART-WAVEGEN-MAIN-ACTIVITY";
     private static final int UART_PROFILE_CONNECTED = 20;
     private static final int UART_PROFILE_DISCONNECTED = 21;
     private static final int STATE_OFF = 10;
@@ -74,33 +76,12 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private ArrayAdapter<String> listAdapter;
     private Button btnConnectDisconnect;
 
-    /* Camera slider specific code */
     // Commands
-    public static final char UP_COMMAND = 0x0;
-    public static final char DOWN_COMMAND = 0x01;
-    public static final char LEFT_COMMAND = 0x02;
-    public static final char RIGHT_COMMAND = 0x03;
-    public static final char STOP_COMMAND = 0x04;
-
-    private Button btUp, btDown, btRight, btLeft, btStop;
+    public static final char STOP_COMMAND = 0x0;
+    public static final char START_COMMAND = 0x01;
+    public static final char SET_PARAM = 0x02;
 
     private EditText editFrequency, editAmplitude;
-
-    public static byte[] integersToBytes(int[] values)
-    {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(baos);
-        for(int i=0; i < values.length; ++i)
-        {
-            try {
-                dos.writeInt(values[i]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return baos.toByteArray();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,21 +99,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         messageListView.setDivider(null);
         btnConnectDisconnect=(Button) findViewById(R.id.btn_select);
 
-        // New UI elements initialisation
-        btDown = (Button) findViewById(R.id.btDown);
-        btUp = (Button) findViewById(R.id.btUp);
-        btRight = (Button) findViewById(R.id.btRight);
-        btLeft = (Button) findViewById(R.id.btLeft);
-        btStop = (Button) findViewById(R.id.btStop);
-
         editFrequency = (EditText) findViewById(R.id.editFrequency);
-
-        btDown.setEnabled(false);
-        btUp.setEnabled(false);
-        btRight.setEnabled(false);
-        btLeft.setEnabled(false);
-        btStop.setEnabled(false);
-
         service_init();
 
         // Handle Disconnect & Connect button
@@ -159,84 +126,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         				}
         			}
                 }
-            }
-        });
-
-        // Handle Up button press and release handlers
-        btUp.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
-                    byte[] value = {UP_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
-                    byte[] value = {STOP_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                }
-                return true;
-            }
-        });
-
-        // Handle Down button press and release handlers
-        btDown.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
-                    byte[] value = {DOWN_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
-                    byte[] value = {STOP_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                }
-                return true;
-            }
-        });
-
-        // Handle Left button press and release handlers
-        btLeft.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
-                    byte[] value = {LEFT_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
-                    byte[] value = {STOP_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                }
-                return true;
-            }
-        });
-
-        // Handle Right button press and release handlers
-        btRight.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
-                    byte[] value = {RIGHT_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                } else if (arg1.getAction()==MotionEvent.ACTION_UP) {
-                    byte[] value = {STOP_COMMAND};
-                    //send data to service
-                    mService.writeRXCharacteristic(value);
-                }
-                return true;
-            }
-        });
-
-         // Handle Stop button click
-        btStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                byte[] value = {STOP_COMMAND};
-                //send data to service
-                mService.writeRXCharacteristic(value);
             }
         });
     }
@@ -283,13 +172,10 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                              listAdapter.add("["+currentDateTimeString+"] Connected to: "+ mDevice.getName());
                         	 	messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
                              mState = UART_PROFILE_CONNECTED;
-                             btDown.setEnabled(true);
-                             btUp.setEnabled(true);
-                             btRight.setEnabled(true);
-                             btLeft.setEnabled(true);
-                             btStop.setEnabled(true);
 
-                             setContentView(R.layout.generator);
+                         //TODO: CALL main activity
+                         Intent intentMain = new Intent(MainActivity.this, WaveGenActivity.class);
+                         startActivity(intentMain);
                      }
             	 });
             }
@@ -305,12 +191,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                              listAdapter.add("["+currentDateTimeString+"] Disconnected to: "+ mDevice.getName());
                              mState = UART_PROFILE_DISCONNECTED;
                              mService.close();
-                            //setUiState();
-                             btDown.setEnabled(false);
-                             btUp.setEnabled(false);
-                             btRight.setEnabled(false);
-                             btLeft.setEnabled(false);
-                             btStop.setEnabled(false);
 
                              setContentView(R.layout.main);
                      }
@@ -460,7 +340,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     public void onCheckedChanged(RadioGroup group, int checkedId) {
        
     }
-
     
     private void showMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
