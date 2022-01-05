@@ -34,7 +34,7 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
-        android:text="1000"
+        android:text="@string/freqDefaultValue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:importantForAutofill="no" />
@@ -46,12 +46,12 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
         android:ems="10"
+        android:importantForAutofill="no"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
+        android:text="@string/amplDefaultValue"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editFrequency"
-        tools:text="100"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/editFrequency" />
 
     <TextView
         android:id="@+id/textView"
@@ -72,4 +72,16 @@
         android:text="@string/mv"
         app:layout_constraintStart_toEndOf="@+id/editAplitude"
         app:layout_constraintTop_toTopOf="@+id/editAplitude" />
+
+    <Spinner
+        android:id="@+id/selectWaveType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editAplitude" />
 </android.support.constraint.ConstraintLayout>

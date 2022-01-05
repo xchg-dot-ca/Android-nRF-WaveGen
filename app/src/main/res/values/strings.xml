@@ -93,4 +93,6 @@
     <string name="set">SET</string>
     <string name="hz">Hz</string>
     <string name="mv">mV</string>
+    <string name="freqDefaultValue">1000</string>
+    <string name="amplDefaultValue">100</string>
 </resources>
