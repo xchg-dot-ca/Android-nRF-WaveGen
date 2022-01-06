@@ -67,8 +67,8 @@ public class WaveGenActivity extends Activity {
     static {
         WaveTypesMapping.put(STRING_OFF,(int)WAVE_OFF);
         WaveTypesMapping.put(STRING_SINE,(int)WAVE_SINUS);
-        WaveTypesMapping.put(STRING_SQUARE1,(int)WAVE_SQAURE1);
-        WaveTypesMapping.put(STRING_SQUARE2,(int)WAVE_SQAURE2);
+        //WaveTypesMapping.put(STRING_SQUARE1,(int)WAVE_SQAURE1);
+        //WaveTypesMapping.put(STRING_SQUARE2,(int)WAVE_SQAURE2);
         WaveTypesMapping.put(STRING_TRIANGLE,(int)WAVE_TRIANGLE);
     }
 
@@ -99,7 +99,9 @@ public class WaveGenActivity extends Activity {
         editAmplitude=(EditText) findViewById(R.id.editAplitude);
 
         dropdown = findViewById(R.id.selectWaveType);
-        String[] items = new String[]{STRING_SINE, STRING_TRIANGLE, STRING_SQUARE1, STRING_SQUARE2};
+        // String[] items = new String[]{STRING_SINE, STRING_TRIANGLE, STRING_SQUARE1, STRING_SQUARE2}; TODO Add proper support for SQARE vaweform
+        String[] items = new String[]{STRING_SINE, STRING_TRIANGLE};
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 

@@ -21,7 +21,7 @@
   -->
 <resources>
 
-    <string name="app_name">Bescor MP101 Controller</string>
+    <string name="app_name">BLE DDS Generator</string>
     <string name="device">Device:</string>
     <string name="no_device">&lt;Select a device&gt;</string>
     <string name="select_device">Select a device</string>
@@ -92,7 +92,7 @@
     <string name="on">ON</string>
     <string name="set">SET</string>
     <string name="hz">Hz</string>
-    <string name="mv">mV</string>
+    <string name="mv">mV ~Vrms</string>
     <string name="freqDefaultValue">1000</string>
     <string name="amplDefaultValue">100</string>
 </resources>
